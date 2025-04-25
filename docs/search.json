@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "CSUF_DS",
-    "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
-  },
-  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
@@ -75,5 +68,12 @@
     "title": "Project2",
     "section": "Insights",
     "text": "Insights\nThink about how you might visualize the model’s predictions and the accuracy of those predictions. Then, create and describe one or more visualizations in line with your ideas.\nWhich flowers (if any) were incorrectly predicted? Why do you suspect that they were incorrectly predicted?"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "CSUF_DS",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
   }
 ]
