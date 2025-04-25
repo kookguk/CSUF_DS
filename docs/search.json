@@ -12,5 +12,68 @@
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Project2.html",
+    "href": "Project2.html",
+    "title": "Project2",
+    "section": "",
+    "text": "Write a few sentences about Encelia californica, Encelia farinosa, and the Fullerton Arboretum. You may also discuss what you learned about the iris dataset.\nWhy should someone care about being able to distinguish between these two species?"
+  },
+  {
+    "objectID": "Project2.html#motivation-and-context",
+    "href": "Project2.html#motivation-and-context",
+    "title": "Project2",
+    "section": "",
+    "text": "Write a few sentences about Encelia californica, Encelia farinosa, and the Fullerton Arboretum. You may also discuss what you learned about the iris dataset.\nWhy should someone care about being able to distinguish between these two species?"
+  },
+  {
+    "objectID": "Project2.html#main-objective",
+    "href": "Project2.html#main-objective",
+    "title": "Project2",
+    "section": "Main Objective",
+    "text": "Main Objective\nIn your own words, describe the goal of this project."
+  },
+  {
+    "objectID": "Project2.html#packages-used-in-this-analysis",
+    "href": "Project2.html#packages-used-in-this-analysis",
+    "title": "Project2",
+    "section": "Packages Used In This Analysis",
+    "text": "Packages Used In This Analysis\n\nlibrary(here)\nlibrary(readr)\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(rsample)\nlibrary(purrr)\nlibrary(yardstick)\nlibrary(tidyr)\n\n\n\n\nPackage\nUse\n\n\n\n\nhere\nto easily load and save data\n\n\nreadr\nto import the CSV file data\n\n\ndplyr\nto massage and summarize data\n\n\nggplot2\nto create nice-looking and informative graphs\n\n\nrsample\nto split data into training and test sets\n\n\npurrr\nto run the cross-validation\n\n\nyardstick\nto evalute the accuracy of the models\n\n\ntidyr\nto “pivot” the predictions data frame so that each row represents 1 model"
+  },
+  {
+    "objectID": "Project2.html#design-and-data-collection",
+    "href": "Project2.html#design-and-data-collection",
+    "title": "Project2",
+    "section": "Design and Data Collection",
+    "text": "Design and Data Collection\nIn this section, describe how you collected the data. (If you weren’t in class that day, ask your classmates how the data was collected.)\nBriefly describe the limitations of your data collection method. What difficulties did you (or the class collectively) have collecting the data? What choices did you (or the class collectively) make during the data collection process that someone else might choose differently?"
+  },
+  {
+    "objectID": "Project2.html#training-test-split",
+    "href": "Project2.html#training-test-split",
+    "title": "Project2",
+    "section": "Training-Test Split",
+    "text": "Training-Test Split\nThere isn’t much data massaging we need to do here, because we were very deliberate about how we set up our data sheet and how we recorded the data on it. However, you may need to do things like import the data and change the type of some variables.\nAt the end of this section, you should write code to randomly split the Encelia data into a training and test set and explain why a training and test set are useful/necessary for this objective."
+  },
+  {
+    "objectID": "Project2.html#exploratory-data-analysis",
+    "href": "Project2.html#exploratory-data-analysis",
+    "title": "Project2",
+    "section": "Exploratory Data Analysis",
+    "text": "Exploratory Data Analysis\nExpand on the EDA you did in the Logistic Regression with Encelia activity. Explain what is going on in your graphs and summaries and how those insights relate to the models you will be building in the next section."
+  },
+  {
+    "objectID": "Project2.html#modeling",
+    "href": "Project2.html#modeling",
+    "title": "Project2",
+    "section": "Modeling",
+    "text": "Modeling\nPropose several logistic regression models and use cross-validation to select a best model, following the steps in the “Cross-Validation (Part 3)” video and the “Model Selection for Logistic Regression” activity.\nExplain what your code is doing:\n\nWhat is logistic regression? Why are you doing it?\nWhy did you choose each model that you are considering?\nWhy are you using cross-validation? How does it work?\nWhich model are you selecting as the best model? Why?\n\nFit the selected “best” model on the training set and make predictions on the test set. Overall, how accurately is your model making predictions?"
+  },
+  {
+    "objectID": "Project2.html#insights",
+    "href": "Project2.html#insights",
+    "title": "Project2",
+    "section": "Insights",
+    "text": "Insights\nThink about how you might visualize the model’s predictions and the accuracy of those predictions. Then, create and describe one or more visualizations in line with your ideas.\nWhich flowers (if any) were incorrectly predicted? Why do you suspect that they were incorrectly predicted?"
   }
 ]

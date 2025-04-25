@@ -1,0 +1,85 @@
+---
+title: "Project2"
+---
+
+## Motivation and Context
+
+```{r}
+#| label: do this first
+#| echo: false
+#| message: false
+
+# change this to whatever you renamed the .qmd file to; then delete this comment
+here::i_am("Project2.qmd")
+```
+
+Write a few sentences about *Encelia californica*, *Encelia farinosa*, and the Fullerton Arboretum. You may also discuss what you learned about the *iris* dataset.
+
+Why should someone care about being able to distinguish between these two species?
+
+## Main Objective
+
+In your own words, describe the goal of this project.
+
+## Packages Used In This Analysis
+
+```{r}
+#| label: load packages
+#| message: false
+#| warning: false
+
+library(here)
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(rsample)
+library(purrr)
+library(yardstick)
+library(tidyr)
+```
+
+ Package   | Use                                                                         
+---------- |-------------
+[here](https://github.com/jennybc/here_here)       | to easily load and save data
+[readr](https://readr.tidyverse.org/)      | to import the CSV file data
+[dplyr](https://dplyr.tidyverse.org/)      | to massage and summarize data
+[ggplot2](https://ggplot2.tidyverse.org/) | to create nice-looking and informative graphs
+[rsample](https://rsample.tidymodels.org/) | to split data into training and test sets
+[purrr](https://purrr.tidyverse.org)  | to run the cross-validation
+[yardstick](https://yardstick.tidymodels.org)  | to evalute the accuracy of the models
+[tidyr](https://tidyr.tidyverse.org)  | to "pivot" the predictions data frame so that each row represents 1 model
+
+## Design and Data Collection
+
+In this section, describe how you collected the data. (If you weren't in class that day, ask your classmates how the data was collected.)
+
+Briefly describe the limitations of your data collection method. What difficulties did you (or the class collectively) have collecting the data? What choices did you (or the class collectively) make during the data collection process that someone else might choose differently? 
+
+## Training-Test Split
+
+There isn't much data massaging we need to do here, because we were very deliberate about how we set up our data sheet and how we recorded the data on it. However, you may need to do things like import the data and change the type of some variables.
+
+At the end of this section, you should write code to randomly split the Encelia data into a training and test set and explain why a training and test set are useful/necessary for this objective.
+
+## Exploratory Data Analysis
+
+Expand on the EDA you did in the Logistic Regression with Encelia activity. Explain what is going on in your graphs and summaries and how those insights relate to the models you will be building in the next section.
+
+## Modeling
+
+Propose several logistic regression models and use cross-validation to select a best model, following the steps in the "Cross-Validation (Part 3)" video and the "Model Selection for Logistic Regression" activity.  
+
+Explain what your code is doing:
+
+* What is logistic regression? Why are you doing it? 
+* Why did you choose each model that you are considering?
+* Why are you using cross-validation? How does it work?
+* Which model are you selecting as the best model? Why?
+
+Fit the selected "best" model on the training set and make predictions on the test set. Overall, how accurately is your model making predictions?
+
+## Insights
+
+Think about how you might visualize the model's predictions and the accuracy of those predictions. Then, create and describe one or more visualizations in line with your ideas. 
+
+Which flowers (if any) were incorrectly predicted? Why do you suspect that they were incorrectly predicted?
