@@ -192,7 +192,7 @@ ggplot(combined, aes(x = approval_rate)) +
 ```
 👉 From these results, it appears that the loan approval rate is relatively high across most cities and shows weak correlation with average rent, average income, and property size. However, strong multicollinearity is observed among the predictor variables.
 
-👉 “Given these findings, I plan to proceed with regression modeling to formally test the statistical significance and predictive power of average rent, income, and loan amount on the approval rate, despite the low correlations observed.
+👉 Given these findings, I plan to proceed with regression modeling to formally test the statistical significance and predictive power of average rent, income, and loan amount on the approval rate, despite the low correlations observed.
 
 👉 I also intend to explore alternative models such as regularized regression (LASSO) to address multicollinearity and assess variable importance, and non-linear models (e.g., random forest) to capture any non-linear effects that may not be visible in the scatter plot.
 

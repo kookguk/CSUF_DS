@@ -8,7 +8,8 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: About
       - href: Project1.qmd
         text: Project1
       - href: Project2.qmd
@@ -19,7 +20,6 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
-
 
 
 
