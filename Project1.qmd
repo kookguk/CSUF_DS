@@ -9,7 +9,7 @@ Analysis of the Relationship between Loan Availability and Local Rent
 
 ## Main Objective
 
-It analyzes how high rents in certain areas affect loan approval rates and insolvency rates to provide insights into financial-real estate linkage risks and financial product design
+It analyzes how high rents in certain areas affect loan approval rates and insolvency rates to provide insights into financial-real estate linkage risks and financial product design.
 
 ## Packages Used In This Analysis
 ```{r}
@@ -156,6 +156,7 @@ These three visualizations work together to provide:
 - A matrix view of correlations between key variables.
 - A focused scatter plot for the relationship of rent vs approval rate.
 - A summary of the approval rate distribution across the dataset.
+
 👉 They support exploratory data analysis (EDA) by uncovering patterns and potential relationships before modeling.
 ```{r}
 # correlation matrix
@@ -190,7 +191,9 @@ ggplot(combined, aes(x = approval_rate)) +
   labs(title = "Distribution of Loan Approval Rate", x = "Approval Rate", y = "Count")
 ```
 👉 From these results, it appears that the loan approval rate is relatively high across most cities and shows weak correlation with average rent, average income, and property size. However, strong multicollinearity is observed among the predictor variables.
+
 👉 “Given these findings, I plan to proceed with regression modeling to formally test the statistical significance and predictive power of average rent, income, and loan amount on the approval rate, despite the low correlations observed.
+
 👉 I also intend to explore alternative models such as regularized regression (LASSO) to address multicollinearity and assess variable importance, and non-linear models (e.g., random forest) to capture any non-linear effects that may not be visible in the scatter plot.
 
 The exploratory data analysis shows weak correlations between loan approval rate and predictors such as average rent and income, while strong correlations are present among the predictors themselves. Therefore, we plan to use linear regression, LASSO, and random forest models to further investigate the relationship. Perhaps the predictive performance of the random forest model, which is less affected by multicollinearity, is expected to be the best.

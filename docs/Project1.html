@@ -196,7 +196,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="main-objective" class="level2">
 <h2 class="anchored" data-anchor-id="main-objective">Main Objective</h2>
-<p>It analyzes how high rents in certain areas affect loan approval rates and insolvency rates to provide insights into financial-real estate linkage risks and financial product design</p>
+<p>It analyzes how high rents in certain areas affect loan approval rates and insolvency rates to provide insights into financial-real estate linkage risks and financial product design.</p>
 </section>
 <section id="packages-used-in-this-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="packages-used-in-this-analysis">Packages Used In This Analysis</h2>
@@ -1201,7 +1201,8 @@ dbl (4): Price, Beds, Baths, SqFt
 </section>
 <section id="eda-with-visualization" class="level2">
 <h2 class="anchored" data-anchor-id="eda-with-visualization">EDA with Visualization</h2>
-<p>These three visualizations work together to provide: - A matrix view of correlations between key variables. - A focused scatter plot for the relationship of rent vs approval rate. - A summary of the approval rate distribution across the dataset. 👉 They support exploratory data analysis (EDA) by uncovering patterns and potential relationships before modeling.</p>
+<p>These three visualizations work together to provide: - A matrix view of correlations between key variables. - A focused scatter plot for the relationship of rent vs approval rate. - A summary of the approval rate distribution across the dataset.</p>
+<p>👉 They support exploratory data analysis (EDA) by uncovering patterns and potential relationships before modeling.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation matrix</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> combined <span class="sc">%&gt;%</span></span>
@@ -1255,7 +1256,9 @@ dbl (4): Price, Beds, Baths, SqFt
 </div>
 </div>
 </div>
-<p>👉 From these results, it appears that the loan approval rate is relatively high across most cities and shows weak correlation with average rent, average income, and property size. However, strong multicollinearity is observed among the predictor variables. 👉 “Given these findings, I plan to proceed with regression modeling to formally test the statistical significance and predictive power of average rent, income, and loan amount on the approval rate, despite the low correlations observed. 👉 I also intend to explore alternative models such as regularized regression (LASSO) to address multicollinearity and assess variable importance, and non-linear models (e.g., random forest) to capture any non-linear effects that may not be visible in the scatter plot.</p>
+<p>👉 From these results, it appears that the loan approval rate is relatively high across most cities and shows weak correlation with average rent, average income, and property size. However, strong multicollinearity is observed among the predictor variables.</p>
+<p>👉 “Given these findings, I plan to proceed with regression modeling to formally test the statistical significance and predictive power of average rent, income, and loan amount on the approval rate, despite the low correlations observed.</p>
+<p>👉 I also intend to explore alternative models such as regularized regression (LASSO) to address multicollinearity and assess variable importance, and non-linear models (e.g., random forest) to capture any non-linear effects that may not be visible in the scatter plot.</p>
 <p>The exploratory data analysis shows weak correlations between loan approval rate and predictors such as average rent and income, while strong correlations are present among the predictors themselves. Therefore, we plan to use linear regression, LASSO, and random forest models to further investigate the relationship. Perhaps the predictive performance of the random forest model, which is less affected by multicollinearity, is expected to be the best.</p>
 </section>
 <section id="predictive-modeling" class="level2">
