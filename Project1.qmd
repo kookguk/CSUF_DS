@@ -1,0 +1,313 @@
+---
+title: "Project1"
+format: html
+---
+
+## Subject
+
+Analysis of the Relationship between Loan Availability and Local Rent
+
+## Main Objective
+
+It analyzes how high rents in certain areas affect loan approval rates and insolvency rates to provide insights into financial-real estate linkage risks and financial product design
+
+## Packages Used In This Analysis
+```{r}
+# Data Wrangling
+library(tidyverse)      
+library(readr)         
+library(janitor)       
+library(lubridate)     
+
+# Exploratory Data Analysis
+library(ggplot2)        
+library(corrplot)
+library(reshape2)
+library(skimr)          
+
+# Model Prediction
+library(caret)          
+library(glmnet)         
+library(randomForest)
+```
+
+## Used Data
+For this project, I will use three main data files:
+
+1. loans_OC.csv: Contains loan data from Orange County.
+2. SoCalRent1.csv and SoCalRent2.csv: Contain rental data from Southern California, including various regions.
+
+These datasets will be combined and analyzed to explore the relationship between regional rental prices and loan approval outcomes.
+
+## Data Wrangling
+```{r}
+# Read data
+loans <- read_csv("loans_OC.csv") %>% clean_names()
+rent1 <- read_csv("SoCalRent1.csv") %>% clean_names()
+rent2 <- read_csv("SoCalRent2.csv") %>% clean_names()
+```
+
+```{r}
+# Combine rent datasets
+rent <- bind_rows(rent1, rent2)
+```
+
+When looking at the data, there were missing values, so it was imputed and processed up to outliers.
+
+Removes any row in loans or rent where 50% or more of the values are missing. Rows with too many missing values may not be useful for analysis, and imputing them could introduce bias or noise. It is safer to drop them before further processing.
+
+```{r}
+# Remove rows with too many missing values
+loans <- loans %>%
+  filter(rowSums(is.na(.)) / ncol(.) < 0.5)
+
+rent <- rent %>%
+  filter(rowSums(is.na(.)) / ncol(.) < 0.5)
+
+# Impute missing values
+loans <- loans %>%
+  mutate(across(where(is.numeric), ~ ifelse(is.na(.), mean(., na.rm = TRUE), .)))
+
+rent <- rent %>%
+  mutate(across(where(is.numeric), ~ ifelse(is.na(.), mean(., na.rm = TRUE), .)))
+
+# Identify and remove outliers (IQR method)
+remove_outliers <- function(df, col) {
+  if (!col %in% names(df)) {
+    warning(paste("Column", col, "not found in dataframe."))
+    return(df)
+  }
+  
+  non_na_values <- df[[col]][!is.na(df[[col]])]
+  
+  if (length(non_na_values) == 0) {
+    warning(paste("No non-NA values in column", col))
+    return(df)
+  }
+  
+  Q1 <- quantile(non_na_values, 0.25)
+  Q3 <- quantile(non_na_values, 0.75)
+  IQR <- Q3 - Q1
+
+  lower <- Q1 - 1.5 * IQR
+  upper <- Q3 + 1.5 * IQR
+  
+  df %>%
+    filter(.data[[col]] >= lower & .data[[col]] <= upper)
+}
+
+
+loans <- remove_outliers(loans, "loan_amount")
+rent <- remove_outliers(rent, "rent")
+
+# Inspect data
+skim(loans)
+skim(rent)
+```
+
+```{r}
+# Check missing values
+loans %>% summarise(across(everything(), ~ sum(is.na(.))))
+rent %>% summarise(across(everything(), ~ sum(is.na(.))))
+```
+Missing values for non-dimensional variables such as census_tract were not imputed. In addition, since the analysis does not use the variable for modeling or calculation, we decided that it doesn't matter if there are missing values.
+
+
+This code transforms two separate datasets (loan and rent) into aggregated city-level summaries and merges them into a single dataset. This merged dataset is ready for exploratory data analysis (EDA) and modeling to study the relationship between loan approval rates and rental market factors across cities.
+```{r}
+# Aggregate loans data by City
+loans_city_summary <- loans %>%
+  group_by(city) %>%
+  summarise(
+    approval_rate = mean(action == "Approved", na.rm = TRUE),
+    avg_loan_amount = mean(loan_amount, na.rm = TRUE),
+    avg_income = mean(income, na.rm = TRUE),
+    count_loans = n()
+  ) %>%
+  ungroup()
+```
+
+```{r}
+# Aggregate rent data by City
+rent_summary <- rent %>%
+  group_by(city) %>%
+  summarise(
+    avg_rent = mean(price, na.rm = TRUE),
+    avg_sqft = mean(sq_ft, na.rm = TRUE),
+    count_rentals = n()
+  ) %>%
+  ungroup()
+```
+
+```{r}
+# merge (inner join: only common city)
+combined <- inner_join(loans_city_summary, rent_summary, by = "city")
+
+print(head(combined))
+```
+
+## Explore combined data
+```{r}
+skim(combined)
+```
+## EDA with Visualization
+
+These three visualizations work together to provide:
+- A matrix view of correlations between key variables.
+- A focused scatter plot for the relationship of rent vs approval rate.
+- A summary of the approval rate distribution across the dataset.
+👉 They support exploratory data analysis (EDA) by uncovering patterns and potential relationships before modeling.
+```{r}
+# correlation matrix
+cor_matrix <- combined %>%
+  select(approval_rate, avg_rent, avg_loan_amount, avg_income, avg_sqft) %>%
+  cor(use = "complete.obs")
+
+cor_melted <- melt(cor_matrix)
+
+ggplot(cor_melted, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  geom_text(aes(label = round(value, 2)), color = "white", size = 4) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0) +
+  labs(title = "Correlation Heatmap",
+       x = "",
+       y = "",
+       fill = "Correlation") +
+  theme_minimal()
+
+
+# Scatter plot: Average rent vs approval rate
+ggplot(combined, aes(x = avg_rent, y = approval_rate)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Average Rent vs Loan Approval Rate",
+       x = "Average Rent",
+       y = "Approval Rate")
+
+# 3. Distribution of approval_rate
+ggplot(combined, aes(x = approval_rate)) +
+  geom_histogram(bins = 20, fill = "skyblue") +
+  labs(title = "Distribution of Loan Approval Rate", x = "Approval Rate", y = "Count")
+```
+👉 From these results, it appears that the loan approval rate is relatively high across most cities and shows weak correlation with average rent, average income, and property size. However, strong multicollinearity is observed among the predictor variables.
+👉 “Given these findings, I plan to proceed with regression modeling to formally test the statistical significance and predictive power of average rent, income, and loan amount on the approval rate, despite the low correlations observed.
+👉 I also intend to explore alternative models such as regularized regression (LASSO) to address multicollinearity and assess variable importance, and non-linear models (e.g., random forest) to capture any non-linear effects that may not be visible in the scatter plot.
+
+The exploratory data analysis shows weak correlations between loan approval rate and predictors such as average rent and income, while strong correlations are present among the predictors themselves. Therefore, we plan to use linear regression, LASSO, and random forest models to further investigate the relationship. Perhaps the predictive performance of the random forest model, which is less affected by multicollinearity, is expected to be the best.
+
+## Predictive Modeling
+```{r}
+# Select key variables
+model_data <- combined %>%
+  select(approval_rate, avg_rent, avg_income, avg_sqft) %>%
+  na.omit()  # remove missing values
+
+# Split into training (80%) and testing (20%) sets
+set.seed(123)
+train_index <- createDataPartition(model_data$approval_rate, p = 0.8, list = FALSE)
+train_data <- model_data[train_index, ]
+test_data <- model_data[-train_index, ]
+```
+
+```{r}
+# Set up cross-validation
+train_control <- trainControl(
+  method = "cv",
+  number = 5,
+  summaryFunction = defaultSummary
+)
+```
+
+```{r}
+# 1️⃣ Linear regression model
+lm_model <- train(
+  approval_rate ~ .,
+  data = train_data,
+  method = "lm",
+  trControl = train_control
+)
+
+# 2️⃣ Random forest model
+rf_model <- train(
+  approval_rate ~ .,
+  data = train_data,
+  method = "rf",
+  trControl = train_control,
+  tuneLength = 3
+)
+
+# 3️⃣ LASSO regression
+lasso_model <- train(
+  approval_rate ~ .,
+  data = train_data,
+  method = "glmnet",
+  trControl = train_control,
+  tuneGrid = expand.grid(alpha = 1, lambda = seq(0.001, 0.1, length = 10))
+)
+```
+
+```{r}
+# Make predictions and evaluate performance
+lm_pred <- predict(lm_model, newdata = test_data)
+rf_pred <- predict(rf_model, newdata = test_data)
+lasso_pred <- predict(lasso_model, newdata = test_data)
+
+lm_perf <- postResample(pred = lm_pred, obs = test_data$approval_rate)
+rf_perf <- postResample(pred = rf_pred, obs = test_data$approval_rate)
+lasso_perf <- postResample(pred = lasso_pred, obs = test_data$approval_rate)
+```
+
+```{r}
+# Compare model performance
+results <- data.frame(
+  Model = c("Linear Regression", "Random Forest", "LASSO"),
+  RMSE = c(lm_perf["RMSE"], rf_perf["RMSE"], lasso_perf["RMSE"]),
+  Rsquared = c(lm_perf["Rsquared"], rf_perf["Rsquared"], lasso_perf["Rsquared"])
+)
+
+print("Model Performance Comparison:")
+print(results)
+```
+
+As expected, the R squared value showed the best performance of the random forest model, which could be selected as the final model.
+
+```{r}
+# Plot variable importance (Random Forest)
+rf_varimp <- varImp(rf_model, scale = TRUE)
+plot(rf_varimp, main = "Random Forest Variable Importance")
+```
+The variable that most influenced the prediction was identified as avg_income.
+
+```{r}
+# Example: Suppose Random Forest is the best model
+final_model <- rf_model
+
+# Save the model to an .rds file
+saveRDS(final_model, file = "final_model_rf.rds")
+```
+
+## Load the saved model later
+```{r}
+# Load the model from the .rds file
+loaded_model <- readRDS("final_model_rf.rds")
+
+# Use the loaded model for predictions
+predictions <- predict(loaded_model, newdata = test_data)
+
+# Check performance on the test set
+loaded_model_perf <- postResample(pred = predictions, obs = test_data$approval_rate)
+print(loaded_model_perf)
+```
+
+Saving the model allows you to reuse it later without retraining, which saves time and ensures reproducibility. You can reload a previously saved model for prediction or further analysis in a new R session.
+
+## Significance of the Project
+This project integrates loan data and rental market data at the city level to explore potential relationships between loan approval rates and local housing characteristics.By combining and analyzing these datasets, we aim to uncover patterns that may not be visible from loan data or rental data alone.
+
+Through data cleaning, transformation, exploratory data analysis (EDA), and predictive modeling, the project demonstrates a complete data science pipeline from raw data to actionable insights.
+
+## Key Insights & Breaking points
+It was discovered that average income was the predictor that had the greatest impact on the loan approval rate. 
+
+However, it was difficult to maximize the model's performance due to the small number of variables and data, suggesting that additional factors such as credit scores and debt ratios were needed. In addition, if the multicollinearity problem, which reveals a strong correlation between predictors, has been solved, better performance can be expected in the linear regression model.
+

@@ -9,13 +9,17 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+      - href: Project1.qmd
+        text: Project1
       - href: Project2.qmd
+        text: Project2
 
 format:
   html:
     theme: cosmo
     css: styles.css
     toc: true
+
 
 
 

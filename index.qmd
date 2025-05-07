@@ -2,10 +2,4 @@
 title: "CSUF_DS"
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
+Hello everyone. I'm Junho Kook, an exchange student from South Korea. I did my best to prepare it even though it has linguistic barriers and I'm new to the R project.
