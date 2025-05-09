@@ -114,6 +114,7 @@ Missing values for non-dimensional variables such as census_tract were not imput
 
 
 This code transforms two separate datasets (loan and rent) into aggregated city-level summaries and merges them into a single dataset. This merged dataset is ready for exploratory data analysis (EDA) and modeling to study the relationship between loan approval rates and rental market factors across cities.
+
 ```{r}
 # Aggregate loans data by City
 loans_city_summary <- loans %>%
