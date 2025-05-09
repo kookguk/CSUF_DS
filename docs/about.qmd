@@ -1,5 +1,0 @@
----
-title: "About"
----
-
-This is the site for the projects of Junho Kook in the Foundation of Data Science class.

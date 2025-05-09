@@ -235,7 +235,7 @@ lm_spec <- linear_reg() %>%
   set_engine("lm")
 
 rf_spec <- rand_forest(trees = 500) %>%
-  set_engine("ranger") %>%
+  set_engine("ranger", importance = "impurity") %>%
   set_mode("regression")
 
 lasso_spec <- linear_reg(penalty = tune(), mixture = 1) %>%  # mixture=1 for LASSO
@@ -272,13 +272,18 @@ collect_metrics(lm_res)
 collect_metrics(rf_res)
 collect_metrics(lasso_res)
 
+final_lm <- lm_wf %>% fit(data = train_data)
+final_rf <- rf_wf %>% fit(data = train_data)
+final_lasso <- lasso_wf %>%
+  finalize_workflow(select_best(lasso_res)) %>%  # lasso는 best tuning 값 사용
+  fit(data = train_data)
 ```
 
 ```{r}
 # Make predictions and evaluate performance
-lm_pred <- predict(lm_model, newdata = test_data)
-rf_pred <- predict(rf_model, newdata = test_data)
-lasso_pred <- predict(lasso_model, newdata = test_data)
+lm_pred <- predict(final_lm, new_data = test_data)
+rf_pred <- predict(final_rf, new_data = test_data)
+lasso_pred <- predict(final_lasso, new_data = test_data)
 
 lm_perf <- postResample(pred = lm_pred, obs = test_data$approval_rate)
 rf_perf <- postResample(pred = rf_pred, obs = test_data$approval_rate)
@@ -301,8 +306,8 @@ As expected, the R squared value showed the best performance of the random fores
 
 ```{r}
 # Plot variable importance (Random Forest)
-rf_varimp <- varImp(rf_model, scale = TRUE)
-plot(rf_varimp, main = "Random Forest Variable Importance")
+library(vip)
+vip(final_rf)
 ```
 The variable that most influenced the prediction was identified as avg_income.
 
