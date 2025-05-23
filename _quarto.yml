@@ -6,14 +6,8 @@ website:
   title: "CSUF_DS"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - href: about.qmd
-        text: About
       - href: Project1.qmd
         text: Project1
-      - href: Project2.qmd
-        text: Project2
 
 format:
   html:
